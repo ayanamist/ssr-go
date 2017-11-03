@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"common"
+	"github.com/ayanamist/ssr-go/common"
 )
 
 const text = "Don't tell me the moon is shining; show me the glint of light on broken glass."

@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"github.com/RouterScript/ProxyClient"
-	"outbound/ss/obfs"
-	"outbound/ss/protocol"
-	"outbound/ss/ssr"
+	"github.com/ayanamist/ssr-go/obfs"
+	"github.com/ayanamist/ssr-go/protocol"
+	"github.com/ayanamist/ssr-go/ssr"
 )
 
 func init() {

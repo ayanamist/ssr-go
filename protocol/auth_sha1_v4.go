@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"time"
 
-	"common"
-	"outbound/ss/ssr"
+	"github.com/ayanamist/ssr-go/common"
+	"github.com/ayanamist/ssr-go/ssr"
 )
 
 func init() {
@@ -195,12 +195,12 @@ func (a *authSHA1v4) PostDecrypt(plainData []byte) (outData []byte, err error) {
 	for a.recvBufferLength > 4 {
 		crc32 := ssr.CalcCRC32(a.recvBuffer, 2, 0xFFFFFFFF)
 		if binary.LittleEndian.Uint16(a.recvBuffer[2:4]) != uint16(crc32&0xFFFF) {
-			common.Error("auth_sha1_v4 post decrypt data crc32 error")
+			//common.Error("auth_sha1_v4 post decrypt data crc32 error")
 			return nil, ssr.ErrAuthSHA1v4CRC32Error
 		}
 		length := int(binary.BigEndian.Uint16(a.recvBuffer[0:2]))
 		if length >= 8192 || length < 8 {
-			common.Error("auth_sha1_v4 post decrypt data length error")
+			//common.Error("auth_sha1_v4 post decrypt data length error")
 			a.recvBufferLength = 0
 			a.recvBuffer = nil
 			return nil, ssr.ErrAuthSHA1v4DataLengthError
@@ -224,7 +224,7 @@ func (a *authSHA1v4) PostDecrypt(plainData []byte) (outData []byte, err error) {
 			a.recvBufferLength -= length
 			a.recvBuffer = a.recvBuffer[length:]
 		} else {
-			common.Error("auth_sha1_v4 post decrypt incorrect checksum")
+			//common.Error("auth_sha1_v4 post decrypt incorrect checksum")
 			a.recvBufferLength = 0
 			a.recvBuffer = nil
 			return nil, ssr.ErrAuthSHA1v4IncorrectChecksum

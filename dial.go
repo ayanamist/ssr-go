@@ -4,7 +4,6 @@ import (
 	"net"
 	"time"
 
-	"common"
 )
 
 var (
@@ -30,13 +29,13 @@ func setLocalAddress(priorityInterfaceAddress string) {
 
 	_, priorityInterfaceAddressIPNet, e := net.ParseCIDR(priorityInterfaceAddress)
 	if e != nil {
-		common.Error("parsing priority interface address failed", priorityInterfaceAddress, e)
+		//common.Error("parsing priority interface address failed", priorityInterfaceAddress, e)
 		return
 	}
 
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
-		common.Warning("can't get interface addresses", err)
+		//common.Warning("can't get interface addresses", err)
 		return
 	}
 
@@ -65,7 +64,7 @@ func Dial(host string, cipher *StreamCipher, priorityInterfaceAddress string) (c
 		if conn, err = dialer.Dial("tcp", host); err == nil {
 			return NewSSTCPConn(conn, cipher), nil
 		}
-		common.Warning("dialing on the interface with priorityInterfaceAddress", priorityInterfaceAddress, err)
+		//common.Warning("dialing on the interface with priorityInterfaceAddress", priorityInterfaceAddress, err)
 		tcpAddr = nil
 	}
 

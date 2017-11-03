@@ -1,7 +1,7 @@
 package protocol
 
 import (
-	"outbound/ss/ssr"
+	"github.com/ayanamist/ssr-go/ssr"
 )
 
 func init() {

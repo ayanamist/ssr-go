@@ -10,10 +10,8 @@ import (
 	"encoding/binary"
 	"errors"
 
-	"common"
-	"common/ds"
-
 	"github.com/Yawning/chacha20"
+	"github.com/ayanamist/ssr-go/common"
 	"github.com/dgryski/go-camellia"
 	"github.com/dgryski/go-idea"
 	"github.com/dgryski/go-rc2"
@@ -115,9 +113,9 @@ func (c *salsaStreamCipher) XORKeyStream(dst, src []byte) {
 	dataSize := len(src) + padLen
 	if cap(dst) >= dataSize {
 		buf = dst[:dataSize]
-	} else if ds.GlobalLeakyBufSize >= dataSize {
-		buf = ds.GlobalLeakyBuf.Get()
-		defer ds.GlobalLeakyBuf.Put(buf)
+	} else if common.GlobalLeakyBufSize >= dataSize {
+		buf = common.GlobalLeakyBuf.Get()
+		defer common.GlobalLeakyBuf.Put(buf)
 		buf = buf[:dataSize]
 	} else {
 		buf = make([]byte, dataSize)

@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"common"
-	"outbound/ss/ssr"
+	"github.com/ayanamist/ssr-go/common"
+	"github.com/ayanamist/ssr-go/ssr"
 )
 
 func init() {
@@ -221,12 +221,12 @@ func (t *tls12TicketAuth) Decode(data []byte) (decodedData []byte, needSendBack 
 
 		for len(t.recvBuffer) > 5 {
 			if !hmac.Equal(t.recvBuffer[0:3], []byte{0x17, 0x3, 0x3}) {
-				common.Error("incorrect magic number", t.recvBuffer[0:3], ", 0x170303 is expected")
+				//common.Error("incorrect magic number", t.recvBuffer[0:3], ", 0x170303 is expected")
 				return nil, false, ssr.ErrTLS12TicketAuthIncorrectMagicNumber
 			}
 			size := int(binary.BigEndian.Uint16(t.recvBuffer[3:5]))
 			if size+5 > len(t.recvBuffer) {
-				common.Debug("unexpected data length, ", size+5, " is expected, but only got ", len(t.recvBuffer))
+				//common.Debug("unexpected data length, ", size+5, " is expected, but only got ", len(t.recvBuffer))
 				break
 			}
 			b = make([]byte, len(decodedData)+size)
@@ -240,14 +240,14 @@ func (t *tls12TicketAuth) Decode(data []byte) (decodedData []byte, needSendBack 
 	}
 
 	if dataLength < 11+32+1+32 {
-		common.Error("too short data:", dataLength)
+		//common.Error("too short data:", dataLength)
 		return nil, false, ssr.ErrTLS12TicketAuthTooShortData
 	}
 
 	hash := t.hmacSHA1(data[11 : 11+22])
 
 	if !hmac.Equal(data[33:33+ssr.ObfsHMACSHA1Len], hash) {
-		common.Error("hmac verification failed:", hash, data[33:33+ssr.ObfsHMACSHA1Len], len(data), " bytes recevied:", data)
+		//common.Error("hmac verification failed:", hash, data[33:33+ssr.ObfsHMACSHA1Len], len(data), " bytes recevied:", data)
 		return nil, false, ssr.ErrTLS12TicketAuthHMACError
 	}
 	needSendBack = true

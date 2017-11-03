@@ -3,7 +3,7 @@ package obfs
 import (
 	"math/rand"
 
-	"outbound/ss/ssr"
+	"github.com/ayanamist/ssr-go/ssr"
 )
 
 type randomHead struct {

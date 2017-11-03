@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"common"
-	"outbound/ss/ssr"
+	"github.com/ayanamist/ssr-go/common"
+	"github.com/ayanamist/ssr-go/ssr"
 )
 
 func init() {

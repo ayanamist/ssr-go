@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net"
 
-	"common/ds"
+	"github.com/ayanamist/ssr-go/common"
 )
 
 var ENotImpl = errors.New("function not implemented")
@@ -47,8 +47,8 @@ func TfoDialWithRawAddr(rawaddr []byte, server string, cipher *StreamCipher) (c 
 		c := &SSTCPConn{
 			Conn:         nil, //leave it nil for now
 			StreamCipher: cipher,
-			readBuf:      ds.GlobalLeakyBuf.Get(),
-			writeBuf:     ds.GlobalLeakyBuf.Get(),
+			readBuf:      common.GlobalLeakyBuf.Get(),
+			writeBuf:     common.GlobalLeakyBuf.Get(),
 		}
 		// get the request payload encrypted and send along with the sync packet
 		cipherData, err := c.preWrite(rawaddr)

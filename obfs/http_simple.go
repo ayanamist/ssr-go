@@ -7,7 +7,7 @@ import (
 	"math/rand"
 	"strings"
 
-	"outbound/ss/ssr"
+	"github.com/ayanamist/ssr-go/ssr"
 )
 
 var (

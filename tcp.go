@@ -4,10 +4,10 @@ import (
 	"net"
 	"sync"
 
-	"common"
-	"common/ds"
-	"outbound/ss/obfs"
-	"outbound/ss/protocol"
+	"github.com/ayanamist/ssr-go/common"
+	"github.com/ayanamist/ssr-go/obfs"
+	"github.com/ayanamist/ssr-go/protocol"
+	"github.com/pkg/errors"
 )
 
 // SSTCPConn the struct that override the net.Conn methods
@@ -27,13 +27,13 @@ func NewSSTCPConn(c net.Conn, cipher *StreamCipher) *SSTCPConn {
 	return &SSTCPConn{
 		Conn:         c,
 		StreamCipher: cipher,
-		readBuf:      ds.GlobalLeakyBuf.Get(),
-		writeBuf:     ds.GlobalLeakyBuf.Get()}
+		readBuf:      common.GlobalLeakyBuf.Get(),
+		writeBuf:     common.GlobalLeakyBuf.Get()}
 }
 
 func (c *SSTCPConn) Close() error {
-	ds.GlobalLeakyBuf.Put(c.readBuf)
-	ds.GlobalLeakyBuf.Put(c.writeBuf)
+	common.GlobalLeakyBuf.Put(c.readBuf)
+	common.GlobalLeakyBuf.Put(c.writeBuf)
 	return c.Conn.Close()
 }
 
@@ -53,7 +53,7 @@ func (c *SSTCPConn) initEncryptor(b []byte) (iv []byte, err error) {
 	if c.enc == nil {
 		iv, err = c.initEncrypt()
 		if err != nil {
-			common.Error("generating IV failed", err)
+			//common.Error("generating IV failed", err)
 			return nil, err
 		}
 
@@ -91,7 +91,7 @@ func (c *SSTCPConn) doRead() (err error) {
 		}
 
 		if needSendBack {
-			common.Debug("do send back")
+			//common.Debug("do send back")
 			//buf := c.IObfs.Encode(make([]byte, 0))
 			//c.Conn.Write(buf)
 			c.Write(make([]byte, 0))
@@ -102,8 +102,7 @@ func (c *SSTCPConn) doRead() (err error) {
 			if c.dec == nil {
 				iv := decodedData[0:c.info.ivLen]
 				if err = c.initDecrypt(iv); err != nil {
-					common.Error("init decrypt failed", err)
-					return err
+					return errors.Wrap(err, "init decrypt failed")
 				}
 
 				if len(c.iv) == 0 {

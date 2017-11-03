@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"common"
-	"outbound/ss/ssr"
+	"github.com/ayanamist/ssr-go/common"
+	"github.com/ayanamist/ssr-go/ssr"
 )
 
 type hmacMethod func(key []byte, data []byte) []byte
@@ -163,7 +163,7 @@ func (a *authAES128) packAuthData(data []byte) (outData []byte) {
 	uid := make([]byte, 4)
 	if len(params) >= 2 {
 		if userID, err := strconv.ParseUint(params[0], 10, 32); err != nil {
-			common.Warning("parsing uint failed", params[0], err)
+			//common.Warning("parsing uint failed", params[0], err)
 			rand.Read(uid)
 		} else {
 			binary.LittleEndian.PutUint32(uid, uint32(userID))
@@ -184,7 +184,7 @@ func (a *authAES128) packAuthData(data []byte) (outData []byte) {
 	aesCipherKey := common.EVPBytesToKey(base64.StdEncoding.EncodeToString(encryptKey)+a.salt, 16)
 	block, err := aes.NewCipher(aesCipherKey)
 	if err != nil {
-		common.Error("creating aes cipher failed", err)
+		//common.Error("creating aes cipher failed", err)
 		return nil
 	}
 
@@ -254,13 +254,11 @@ func (a *authAES128) PostDecrypt(plainData []byte) (outData []byte, err error) {
 
 		h := a.hmac(key, a.recvBuffer[0:2])
 		if h[0] != a.recvBuffer[2] || h[1] != a.recvBuffer[3] {
-			common.Error("client post decrypt hmac error")
 			return nil, ssr.ErrAuthAES128HMACError
 		}
 
 		length := int(binary.LittleEndian.Uint16(a.recvBuffer[0:2]))
 		if length >= 8192 || length < 8 {
-			common.Error("client post decrypt length mismatch")
 			return nil, ssr.ErrAuthAES128DataLengthError
 		}
 
@@ -270,7 +268,6 @@ func (a *authAES128) PostDecrypt(plainData []byte) (outData []byte, err error) {
 
 		h = a.hmac(key, a.recvBuffer[0:length-4])
 		if !hmac.Equal(h[0:4], a.recvBuffer[length-4:]) {
-			common.Error("client post decrypt incorrect checksum")
 			return nil, ssr.ErrAuthAES128IncorrectChecksum
 		}
 

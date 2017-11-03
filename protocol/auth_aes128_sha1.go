@@ -1,6 +1,6 @@
 package protocol
 
-import "common"
+import "github.com/ayanamist/ssr-go/common"
 
 func init() {
 	register("auth_aes128_sha1", newAuthAES128SHA1)

@@ -3,7 +3,7 @@ package obfs
 import (
 	"strings"
 
-	"outbound/ss/ssr"
+	"github.com/ayanamist/ssr-go/ssr"
 )
 
 type creator func() IObfs
