@@ -7,7 +7,7 @@ import (
 	"net"
 	"time"
 
-	"common"
+	"github.com/ayanamist/ssr-go/common"
 	"github.com/ftrvxmtrx/fd"
 )
 
